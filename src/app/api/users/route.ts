@@ -2,8 +2,14 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import validator from "validator";
 import bcrypt from "bcryptjs";
-
 const prisma = new PrismaClient();
+
+const userError = (message: string) => {
+  return NextResponse.json({
+    message,
+  });
+};
+
 export async function GET() {
   const users = await prisma.users.findMany();
   return NextResponse.json(users);
@@ -19,15 +25,20 @@ export async function POST(request: Request) {
     validator.isEmpty(email) ||
     validator.isEmpty(password)
   ) {
-    return NextResponse.json({
-      message: "Preencha todos os campos",
-    });
+    return userError("Preencha todos os campos");
   }
 
   if (!validator.isEmail(email)) {
-    return NextResponse.json({
-      message: "Email inválido",
-    });
+    userError("Email inválido");
+  }
+  const emailExists = await prisma.users.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (emailExists) {
+    return userError("Email já cadastrado");
   }
   try {
     const user = await prisma.users.create({

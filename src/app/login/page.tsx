@@ -1,8 +1,10 @@
+
 import Image from "next/image";
 import logo from "/public/logo.svg";
-import RegisterForm from "@/components/RegisterForm";
+import Link from "next/link";
+import LoginForm from "@/components/LoginForm";
 
-const Page = async () => {
+export default function SignIn() {
   return (
     <div className="grid lg:grid-flow-col place-content-center pl-4 lg:justify-between h-screen container lg:px-24">
       <div className="flex gap-3 items-center justify-center lg:ml-10">
@@ -11,14 +13,17 @@ const Page = async () => {
           food explorer
         </span>
       </div>
-      <div className="lg:bg-dark-700 lg:p-16 lg:rounded-2xl lg:place-self-center">
+      <div className="lg:bg-dark-700 lg:p-16 lg:rounded-2xl lg:place-self-center grid">
         <h1 className="text-light-100 font-poppins font-medium text-3xl text-center hidden lg:block">
-          Crie sua conta
+          Faça login
         </h1>
-        <RegisterForm />
+        <LoginForm/>
+        <Link href="/register" className="text-link">
+          Criar uma conta
+        </Link>
       </div>
     </div>
   );
-};
+}
 
-export default Page;
+
