@@ -1,9 +1,7 @@
 import "./globals.css";
 import { Roboto, Poppins } from "next/font/google";
 import { NextAuthProvider } from "./providers";
-
-
-
+import Header from "@/components/layout/Header";
 
 const poppins = Poppins({
   weight: ["400", "500", "700"],
@@ -27,11 +25,13 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html lang="pt-br">
       <body className={`${roboto.variable} ${poppins.variable} font-roboto`}>
-        <NextAuthProvider>{children}</NextAuthProvider>
+        <NextAuthProvider>
+          
+          {children}
+        </NextAuthProvider>
       </body>
     </html>
   );

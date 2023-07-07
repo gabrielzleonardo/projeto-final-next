@@ -16,7 +16,6 @@ model Users {
   password String
   name     String?
   isAdmin  Boolean @default(false)
-  dishes   Dish[]
 }
 
 model Dish {
@@ -25,7 +24,6 @@ model Dish {
   description String
   price       Float
   image       String
-  user        Users        @relation(fields: [userId], references: [id])
   userId      Int
   ingredients Ingredient[]
 }

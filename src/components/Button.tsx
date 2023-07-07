@@ -1,12 +1,20 @@
 "use client";
-import { signOut } from "next-auth/react";
+import { signOut, signIn } from "next-auth/react";
+import Link from "next/link";
 
 const Button = () => {
   return (
     <div>
-      <button className="bg-white text-red-600 " onClick={() => signOut()}>
+      <Link
+      href="/login"
+        className="bg-white text-red-600 "
+        onClick={() => {
+          signOut();
+          
+        }}
+      >
         logout
-      </button>
+      </Link>
     </div>
   );
 };

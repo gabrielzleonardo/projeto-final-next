@@ -1,19 +1,22 @@
+import Header from "@/components/layout/Header";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
-
-const IsLogged = async ({ children }: any) => {
+export default async function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const session = await getServerSession(authOptions);
   if (!session) {
     redirect("/login");
   }
-  // console.log(session);
   return (
-    <div>
-      <pre className="text-white">{JSON.stringify(session, null, 2)}</pre>
-      {children}
-    </div>
-  );
-};
+    <section>
+      <Header />
 
-export default IsLogged;
+      {children}
+      {JSON.stringify(session, null, 2)}
+    </section>
+  );
+}
