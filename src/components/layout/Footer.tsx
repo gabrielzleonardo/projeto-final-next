@@ -2,7 +2,7 @@ const Footer = () => {
   return (
     <footer className="bg-dark-600 py-7 ">
       <div className="container  flex justify-between items-center">
-        <div className="text-light-700 flex gap-2 font-bold lg:text-2xl">
+        <div className="text-light-700 flex gap-2 font-bold lg:text-2xl items-center">
           <svg
             width="20"
             height="19"
