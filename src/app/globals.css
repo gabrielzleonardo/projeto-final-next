@@ -13,7 +13,7 @@
     @apply px-4 py-2 rounded-md w-full text-center;
   }
   .btn-primary {
-    @apply bg-tomato-100 text-light-100 py-3 px-8 hover:bg-tomato-200 disabled:bg-tomato-400 duration-300;
+    @apply bg-tomato-100 text-light-100 py-3 px-8 hover:bg-tomato-200 disabled:bg-tomato-400 duration-300 rounded-md;
   }
   .text-link {
     @apply text-light-100 font-poppins text-sm font-medium text-center w-full ;
