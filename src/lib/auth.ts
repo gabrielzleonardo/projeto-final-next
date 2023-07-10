@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 import { use } from "react";
+import ts from "typescript";
 const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
@@ -45,7 +46,7 @@ export const authOptions: NextAuthOptions = {
         },
         password: { label: "Password", type: "password" },
       },
-      
+      // @ts-ignore
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
           return null;

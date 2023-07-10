@@ -1,8 +1,7 @@
-
 import Image from "next/image";
 import logo from "/public/logo.svg";
 import Link from "next/link";
-import LoginForm from "@/components/LoginForm";
+import LoginForm from "@/components/authForms/LoginForm";
 
 export default function SignIn() {
   return (
@@ -17,7 +16,7 @@ export default function SignIn() {
         <h1 className="text-light-100 font-poppins font-medium text-3xl text-center hidden lg:block">
           Faça login
         </h1>
-        <LoginForm/>
+        <LoginForm />
         <Link href="/register" className="text-link">
           Criar uma conta
         </Link>
@@ -25,5 +24,3 @@ export default function SignIn() {
     </div>
   );
 }
-
-

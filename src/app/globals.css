@@ -19,3 +19,12 @@
     @apply text-light-100 font-poppins text-sm font-medium text-center w-full ;
   }
 }
+
+@layer components {
+  .ul-mobile-menu {
+    @apply flex flex-col items-center justify-center gap-y-4 container mt-9;
+  }
+ .ul-mobile-menu li {
+    @apply text-light-300 font-poppins text-2xl font-light w-full border-b border-dark-1000 p-2 pb-[10px];
+  }
+}
