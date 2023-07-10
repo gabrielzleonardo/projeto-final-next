@@ -1,9 +1,9 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-
 import { compare } from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
+import { use } from "react";
 const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
@@ -15,20 +15,22 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session, token }) {
-      
-      // @ts-ignore
       session.user.isAdmin = token.isAdmin;
-      // @ts-ignore
-      session.user.id = token.id;
+      if (session.user) {
+        session.user.isAdmin = token.isAdmin;
+        session.user.id = token.id;
+      }
+
       return session;
     },
+
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        // @ts-ignore
+
         token.isAdmin = user.isAdmin;
-        token.id = user.id;
       }
+
       return token;
     },
   },
@@ -43,7 +45,7 @@ export const authOptions: NextAuthOptions = {
         },
         password: { label: "Password", type: "password" },
       },
-      //@ts-ignore
+      
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
           return null;
@@ -59,7 +61,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        return user
+        return user;
       },
     }),
   ],

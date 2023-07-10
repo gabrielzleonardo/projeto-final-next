@@ -15,8 +15,8 @@ export default async function AuthLayout({
     <section>
       <Header />
 
-      {children}
       {JSON.stringify(session, null, 2)}
+      {children}
     </section>
   );
 }
