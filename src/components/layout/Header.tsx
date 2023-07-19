@@ -14,25 +14,28 @@ const Header = async () => {
       <div className="flex container lg:px-24 justify-between gap-8">
         <MobileMenu userIsAdmin={userIsAdmin} />
         <Logo userIsAdmin={userIsAdmin} />
-        
-          <div className="hidden lg:flex flex-1 ">
-            <button className="bg-dark-900 pl-4 pr-2 rounded-l-md">
-              <Image
-                src="/ui-icons/search-icon.svg"
-                width={24}
-                height={24}
-                alt="ícone para para pesquisar"
-              />
-            </button>
-            <input
-              type="text"
-              className="text-input rounded-l-none w-full"
-              placeholder="Busque por pratos ou ingredientes"
+
+        <div className="hidden lg:flex flex-1 ">
+          <button className="bg-dark-900 pl-4 pr-2 rounded-l-md">
+            <Image
+              src="/ui-icons/search-icon.svg"
+              width={24}
+              height={24}
+              alt="ícone para para pesquisar"
             />
-          </div>
-     
+          </button>
+          <input
+            type="text"
+            className="text-input rounded-l-none w-full"
+            placeholder="Busque por pratos ou ingredientes"
+          />
+        </div>
+
         {userIsAdmin && (
-          <Link className="btn btn-primary hidden lg:block max-w-[200px]" href="/">
+          <Link
+            className="btn btn-primary hidden lg:block max-w-[200px]"
+            href="/novoPrato"
+          >
             Novo prato
           </Link>
         )}

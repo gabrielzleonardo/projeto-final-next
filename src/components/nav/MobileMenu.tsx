@@ -22,7 +22,7 @@ const MobileMenu = ({ userIsAdmin }: { userIsAdmin?: boolean }) => {
 
   return (
     <div className="grid align-content-center lg:hidden">
-      <button  onClick={openModal}>
+      <button onClick={openModal}>
         <Image
           src="/ui-icons/menu-icon.svg"
           width={24}
@@ -67,7 +67,7 @@ const MobileMenu = ({ userIsAdmin }: { userIsAdmin?: boolean }) => {
               </li>
               {!!userIsAdmin && (
                 <li>
-                  <Link href="#">Novo prato</Link>
+                  <Link onClick={closeModal} href="/novoPrato">Novo prato</Link>
                 </li>
               )}
             </ul>

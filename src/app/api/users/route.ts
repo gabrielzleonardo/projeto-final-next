@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 import validator from "validator";
 import bcrypt from "bcryptjs";
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma";
 
 const userError = (message: string) => {
   return NextResponse.json({
