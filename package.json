@@ -37,6 +37,6 @@
     "@types/validator": "^13.7.17",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.3.0",
-    "prisma": "^4.16.2"
+    "prisma": "^5.0.0"
   }
 }

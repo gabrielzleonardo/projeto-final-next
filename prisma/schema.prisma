@@ -10,7 +10,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
+
+
+ model Users {
   id       Int     @id @default(autoincrement())
   email    String  @unique
   password String
@@ -18,19 +20,28 @@ model Users {
   isAdmin  Boolean @default(false)
 }
 
-model Dish {
+model Dishes {
   id          Int          @id @default(autoincrement())
   name        String
   description String
   price       Float
   image       String
   userId      Int
-  ingredients Ingredient[]
+  ingredients Ingredients[]
+  category    Categories     @relation(fields: [categoryId], references: [id])
+  categoryId  Int        
 }
 
-model Ingredient {
+model Categories {
+  id    Int    @id @default(autoincrement())
+  name  String
+  dishes Dishes[]
+
+}
+
+model Ingredients {
   id     Int    @id @default(autoincrement())
   name   String
-  dish   Dish   @relation(fields: [dishId], references: [id])
+  dish   Dishes   @relation(fields: [dishId], references: [id])
   dishId Int
 }

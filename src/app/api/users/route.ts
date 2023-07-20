@@ -16,7 +16,7 @@ export async function GET() {
 
 export async function HEAD(request: Request) {}
 
-export async function POST(request: Request) {
+  export async function POST(request: Request) {
   const { email, password, name } = await request.json();
   const hashedPassword = await bcrypt.hash(password, 8);
   if (
