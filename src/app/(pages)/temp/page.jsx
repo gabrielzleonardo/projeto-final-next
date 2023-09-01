@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 
 import Router from "next/router";
 
@@ -34,7 +34,7 @@ const Upload = () => {
 
   return (
     <>
-      <div>
+      <div className="page">
         <form onSubmit={submitData}>
           <h1>Upload Image</h1>
 

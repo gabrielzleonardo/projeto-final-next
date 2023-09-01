@@ -1,15 +1,15 @@
-import { uploadImage } from "@/lib/cloudinary";
-import prisma from "@/lib/prisma";
-import { getImage } from "@/lib/formidable";
-import { NextResponse } from "next/server";
+import { getImage } from "@/formidable";
+import { uploadImage } from "@/cloudinary";
+import prisma from "@/prisma";
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
-export async function POST(request: Request) {
-  const imageUploaded = await getImage(request);
+
+export default async function handle(req, res) {
+  const imageUploaded = await getImage(req);
 
   const imageData = await uploadImage(imageUploaded.path);
 
@@ -21,5 +21,5 @@ export async function POST(request: Request) {
     },
   });
 
-  NextResponse.json(result);
+  res.json(result);
 }

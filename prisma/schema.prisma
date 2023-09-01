@@ -10,38 +10,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
- model Users {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
+model Users {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
   password String
   name     String?
-  isAdmin  Boolean @default(false)
+  isAdmin  Boolean  @default(false)
 }
 
 model Dishes {
-  id          Int          @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   name        String
   description String
   price       Float
-  image       String
-  userId      Int
   ingredients Ingredients[]
-  category    Categories     @relation(fields: [categoryId], references: [id])
-  categoryId  Int        
+  image       Image?        @relation(fields: [imageId], references: [id])
+  imageId     String?
+  category    Categories    @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+}
+
+model Image {
+  id       String   @id @default(cuid())
+  publicId String   @unique
+  format   String
+  version  String
+  Dishes   Dishes[]
 }
 
 model Categories {
-  id    Int    @id @default(autoincrement())
-  name  String
+  id     Int      @id @default(autoincrement())
+  name   String
   dishes Dishes[]
-
 }
 
 model Ingredients {
   id     Int    @id @default(autoincrement())
   name   String
-  dish   Dishes   @relation(fields: [dishId], references: [id])
+  dish   Dishes @relation(fields: [dishId], references: [id])
   dishId Int
 }

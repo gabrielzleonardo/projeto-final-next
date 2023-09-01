@@ -1,19 +1,19 @@
 import { uploadImage } from "@/lib/cloudinary";
 import prisma from "@/lib/prisma";
 import { getImage } from "@/lib/formidable";
+import { NextResponse } from "next/server";
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
-
-export default async function handle(req:Request, res:Response) {
-  const imageUploaded = await getImage(req);
+export async function POST(request) {
+  const imageUploaded = await getImage(request);
 
   const imageData = await uploadImage(imageUploaded.path);
 
-  const result = await prisma.image.create({
+  const result = await prisma.dishes.create({
     data: {
       publicId: imageData.public_id,
       format: imageData.format,
@@ -21,5 +21,5 @@ export default async function handle(req:Request, res:Response) {
     },
   });
 
-  res.json(result);
+  NextResponse.json(result);
 }
