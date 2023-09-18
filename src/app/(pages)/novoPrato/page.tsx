@@ -1,67 +1,53 @@
 "use client";
-import { useState } from "react";
-
-import Router from "next/router";
+import { useState, useEffect } from "react";
 
 const Upload = () => {
-  const [imageUploaded, setImageUploaded] = useState();
+  const [imageFile, setImageFile] = useState<any>([]);
+  const [blob, setBlob] = useState<any>("");
 
-  const handleChange = (event) => {
-    setImageUploaded(event.target.files[0]);
+  const handleFileInputChange = ({ target }: any) => {
+    const inputFile = target.files[0];
+    setImageFile(inputFile);
+    setBlob(URL.createObjectURL(inputFile));
   };
 
-  const submitData = async (e) => {
-    e.preventDefault();
-
-    if (!imageUploaded) {
-      return;
-    }
-
+  const handleUpload = async () => {
+    console.log("imageFile", imageFile);
+    if (!imageFile) return;
     try {
-      const formData = new FormData();
-      formData.append("image", imageUploaded);
+      const data = new FormData();
+      data.append("image", imageFile);
 
-      await fetch("/api/upload", {
+      const res = await fetch("/api/upload", {
         method: "POST",
-        body: formData,
-      });
-
-      Router.push("/");
-    } catch (error) {
-      console.error(error);
+        body: data,
+      })
+        .then((res) => res.json())
+        .catch((err) => console.error(err));
+      console.log(res);
+      if (!res.ok) throw new Error(await res.text());
+    } catch (e: any) {
+      console.error(e);
     }
   };
 
   return (
     <>
       <div>
-        <form onSubmit={submitData}>
+        <form>
           <h1>Upload Image</h1>
-
           <input
-            onChange={handleChange}
+            onChange={(e) => {
+              handleFileInputChange(e);
+            }}
             accept=".jpg, .png, .gif, .jpeg"
             type="file"
-          ></input>
-
-          <input type="submit" value="Upload" />
+          />
+          <button type="button" onClick={handleUpload}>
+            enviar
+          </button>
         </form>
       </div>
-      <style jsx>{`
-        .page {
-          background: white;
-          padding: 3rem;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        input[type="submit"] {
-          background: #ececec;
-          border: 0;
-          padding: 1rem 2rem;
-        }
-      `}</style>
     </>
   );
 };
