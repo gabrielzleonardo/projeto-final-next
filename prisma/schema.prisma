@@ -18,7 +18,7 @@ model Users {
   isAdmin  Boolean  @default(false)
 }
 
-model Dishes {
+model Dish {
   id          Int           @id @default(autoincrement())
   name        String
   description String
@@ -26,20 +26,20 @@ model Dishes {
   ingredients Ingredient[]
   image       String
   imageId     String?
-  category    Categories    @relation(fields: [categoryId], references: [id])
+  category    Category    @relation(fields: [categoryId], references: [id])
   categoryId  Int
 }
 
 
-model Categories {
+model Category {
   id     Int      @id @default(autoincrement())
   name   String
-  dishes Dishes[]
+  dishes Dish[]
 }
 
 model Ingredient {
   id     Int    @id @default(autoincrement())
   name   String
-  dish   Dishes @relation(fields: [dishId], references: [id])
+  dish   Dish @relation(fields: [dishId], references: [id])
   dishId Int
 }

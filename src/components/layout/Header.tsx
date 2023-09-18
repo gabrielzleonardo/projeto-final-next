@@ -1,5 +1,5 @@
 import MobileMenu from "../nav/MobileMenu";
-import SignOutButton from "../SignOutButton";
+import SignOutButton from "../nav/SignOutButton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import UserOrders from "../nav/UserOrders";

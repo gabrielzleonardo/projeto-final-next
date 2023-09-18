@@ -5,20 +5,7 @@ import fs from "fs";
 import crypto from "crypto";
 import { appError } from "@/utils/AppError";
 
-const dishesImagesFolder = path.resolve(
-  __dirname,
-  "..",
-  "..",
-  "..",
-  "..",
-  "..",
-  "public",
-  "dishes-images"
-);
-
-export async function POST(request: NextRequest) {
-  const data = await request.formData();
-  const image: File | null = data.get("image") as unknown as File;
+const handleDishImage = async (image: File) => {
   if (!image) {
     return appError("Imagem não encontrada");
   }
@@ -36,5 +23,24 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return appError("Erro ao salvar imagem");
   }
+  return fileName;
+};
+
+const dishesImagesFolder = path.resolve(
+  __dirname,
+  "..",
+  "..",
+  "..",
+  "..",
+  "..",
+  "public",
+  "dishes-images"
+);
+
+export async function POST(request: NextRequest) {
+  const data = await request.formData();
+  const image: File | null = data.get("image") as unknown as File;
+  const imageName = handleDishImage(image);
+
   return NextResponse.json({ success: true });
 }

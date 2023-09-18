@@ -1,18 +1,19 @@
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 const Upload = () => {
   const [imageFile, setImageFile] = useState<any>([]);
-  const [blob, setBlob] = useState<any>("");
+  // const [blob, setBlob] = useState<any>("");
 
-  const handleFileInputChange = ({ target }: any) => {
+  const handleFileInput = ({ target }: any) => {
     const inputFile = target.files[0];
     setImageFile(inputFile);
-    setBlob(URL.createObjectURL(inputFile));
+    // setBlob(URL.createObjectURL(inputFile));
   };
 
-  const handleUpload = async () => {
-    console.log("imageFile", imageFile);
+  const handleSubmit = async () => {
     if (!imageFile) return;
     try {
       const data = new FormData();
@@ -32,23 +33,41 @@ const Upload = () => {
   };
 
   return (
-    <>
-      <div>
-        <form>
-          <h1>Upload Image</h1>
+    <div className="container">
+      <Link href="/" className="text-link text-base text-light-300">
+        Voltar
+      </Link>
+      <h1>Novo prato</h1>
+      <form className="">
+        <fieldset>
+          <legend>Imagem do prato</legend>
+          <label
+            htmlFor="fileInput"
+            className="px-8 py-3 bg-dark-800 flex items-center cursor-pointer gap-2 rounded-lg text-light-100"
+          >
+            <Image
+              src="/ui-icons/upload-icon.svg"
+              width={24}
+              height={25}
+              alt="upload icon"
+            />
+            Selecione a imagem
+          </label>
           <input
+            id="fileInput"
             onChange={(e) => {
-              handleFileInputChange(e);
+              handleFileInput(e);
             }}
             accept=".jpg, .png, .gif, .jpeg"
             type="file"
+            className="sr-only"
           />
-          <button type="button" onClick={handleUpload}>
-            enviar
-          </button>
-        </form>
-      </div>
-    </>
+        </fieldset>
+        <button type="button" onClick={handleSubmit}>
+          enviar
+        </button>
+      </form>
+    </div>
   );
 };
 
