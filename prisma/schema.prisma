@@ -24,19 +24,12 @@ model Dishes {
   description String
   price       Float
   ingredients Ingredient[]
-  image       Image?        @relation(fields: [imageId], references: [id])
+  image       String
   imageId     String?
   category    Categories    @relation(fields: [categoryId], references: [id])
   categoryId  Int
 }
 
-model Image {
-  id       String   @id @default(cuid())
-  publicId String   @unique
-  format   String
-  version  String
-  Dishes   Dishes[]
-}
 
 model Categories {
   id     Int      @id @default(autoincrement())
