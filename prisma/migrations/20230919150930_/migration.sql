@@ -8,7 +8,7 @@ CREATE TABLE "Users" (
 );
 
 -- CreateTable
-CREATE TABLE "Dishes" (
+CREATE TABLE "Dish" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
@@ -16,13 +16,14 @@ CREATE TABLE "Dishes" (
     "image" TEXT NOT NULL,
     "imageId" TEXT,
     "categoryId" INTEGER NOT NULL,
-    CONSTRAINT "Dishes_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Categories" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Dish_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
-CREATE TABLE "Categories" (
+CREATE TABLE "Category" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "name" TEXT NOT NULL
+    "name" TEXT NOT NULL,
+    "value" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -30,7 +31,7 @@ CREATE TABLE "Ingredient" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "dishId" INTEGER NOT NULL,
-    CONSTRAINT "Ingredient_dishId_fkey" FOREIGN KEY ("dishId") REFERENCES "Dishes" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Ingredient_dishId_fkey" FOREIGN KEY ("dishId") REFERENCES "Dish" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateIndex
