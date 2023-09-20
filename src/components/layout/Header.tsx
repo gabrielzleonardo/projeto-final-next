@@ -33,7 +33,7 @@ const Header = async () => {
 
         {userIsAdmin && (
           <Link
-            className="btn btn-primary hidden lg:block max-w-[200px]"
+            className="btn btn-primary hidden lg:inline-flex lg:justify-center lg:items-center w-[200px]"
             href="/novoPrato"
           >
             Novo prato
