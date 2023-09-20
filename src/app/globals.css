@@ -7,13 +7,13 @@
     @apply bg-dark-400 text-light-300;
   }
   .text-input {
-    @apply px-[.87rem] py-4 bg-dark-900 rounded-lg placeholder:text-light-500;
+    @apply px-3 py-4 bg-dark-900 rounded-lg placeholder:text-light-500;
   }
   .btn {
     @apply px-4 py-2 rounded-md w-full text-center;
   }
   .btn-primary {
-    @apply bg-tomato-100 text-light-100 py-3 px-8 hover:bg-tomato-200 disabled:bg-tomato-400 duration-300 rounded-md;
+    @apply bg-tomato-100 text-light-100 px-8 hover:bg-tomato-200 disabled:bg-tomato-400 duration-300 rounded-md;
   }
   .text-link {
     @apply text-light-100 font-poppins text-sm font-medium text-center w-full;
@@ -38,10 +38,6 @@
 
   .dish-input-wrapper input,
   .dish-input-wrapper select {
-    @apply placeholder:text-light-500 rounded-lg px-4 py-3 bg-dark-800;
-  }
-
-  .dish-input-wrapper select::after {
-    @apply content-["aa"];
+    @apply bg-dark-800 text-input;
   }
 }
