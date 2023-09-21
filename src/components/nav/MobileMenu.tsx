@@ -67,7 +67,9 @@ const MobileMenu = ({ userIsAdmin }: { userIsAdmin?: boolean }) => {
               </li>
               {!!userIsAdmin && (
                 <li>
-                  <Link onClick={closeModal} href="/novoPrato">Novo prato</Link>
+                  <Link onClick={closeModal} href="/novo-prato">
+                    Novo prato
+                  </Link>
                 </li>
               )}
             </ul>

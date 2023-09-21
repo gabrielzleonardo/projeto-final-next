@@ -34,7 +34,7 @@ const Header = async () => {
         {userIsAdmin && (
           <Link
             className="btn btn-primary hidden lg:inline-flex lg:justify-center lg:items-center w-[200px]"
-            href="/novoPrato"
+            href="/novo-prato"
           >
             Novo prato
           </Link>
