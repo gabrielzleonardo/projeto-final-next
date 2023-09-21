@@ -1,9 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import Image from "next/image";
+import { handleFileInput } from "@/utils/handleFileUpload";
 
 const DishRegisterForm = ({ id }: { id?: number }) => {
-  const [imageFile, setImageFile] = useState<any>([]);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageName, setImageName] = useState<string>("");
   const [category, setCategory] = useState<any>("refeicao");
   const [dishName, setDishName] = useState<string>("");
   const [ingredients, setIngredients] = useState<string[]>([]);
@@ -12,15 +14,22 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
   const [dishData, setDishData] = useState<null>(null);
   const [price, setPrice] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [teste, setTeste] = useState<any>(null);
 
   // const [blob, setBlob] = useState<any>("");
   // console.log(dishName);
 
-  const handleFileInput = ({ target }: any) => {
-    const inputFile = target.files[0];
-    setImageFile(inputFile);
-    // setBlob(URL.createObjectURL(inputFile));
-  };
+  useEffect(() => {
+    if (!imageFile) return;
+    // console.log(imageFile);
+    const getImageName = async () => {
+      const image = await handleFileInput(imageFile);
+      setImageName(image);
+    };
+    getImageName();
+  }, [imageFile]);
+
+  // setBlob(URL.createObjectURL(inputFile));
 
   const handleAddIngredientClick = () => {
     if (!newIngredient) return;
@@ -37,52 +46,73 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
   };
 
   const handleSubmit = async () => {
-    // if (!imageFile) return;
+    const formDataObj = {
+      name: dishName,
+      category,
+      ingredients,
+      price,
+      description,
+    };
     try {
-      const formDataObj: any = {};
-      const data = new FormData();
-      data.append("image", imageFile);
-      data.append("name", dishName);
-      data.append("category", category);
-      data.append("ingredients", ingredients.join(","));
-      data.append("price", price);
-      data.append("description", description);
-      data.forEach((value, key) => (formDataObj[key] = value));
-      console.log(formDataObj);
- 
       const res = await fetch("/api/dishes", {
         method: "POST",
         body: JSON.stringify(formDataObj),
       })
         .then((res) => res.json())
         .catch((err) => console.error(err));
-      console.log(res);
     } catch (e: any) {
       console.error(e);
     }
   };
   return (
-    <div>
+    <div className="">
       <h1 className="my-7 text-3xl">{!id ? "Novo" : "Editar"} prato</h1>
       <form id="form" className="grid gap-y-6">
         <div className="flex flex-col gap-y-4">
           <span className="text-light-400">Imagem do prato</span>
           <label
             htmlFor="fileInput"
-            className="px-8 py-3 bg-dark-800 flex items-center cursor-pointer gap-2 rounded-lg text-light-100 text-sm"
+            className="px-8 py-3 bg-dark-800 flex items-center justify-between cursor-pointer gap-2 rounded-lg text-light-100 text-sm"
           >
-            <Image
-              src="/ui-icons/upload-icon.svg"
-              width={24}
-              height={25}
-              alt="upload icon"
-            />
-            Selecione a imagem
+            <div className="flex items-center gap-2">
+              <Image
+                src="/ui-icons/upload-icon.svg"
+                width={24}
+                height={25}
+                alt="upload icon"
+              />
+              <span>{imageFile ? imageFile.name : "Selecione uma imagem"}</span>
+            </div>
+            {imageFile && (
+              <button onClick={() => setImageFile(null)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="8"
+                  height="9"
+                  viewBox="0 0 8 9"
+                  fill="none"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M7.88284 1.04123C8.03905 1.19744 8.03905 1.45071 7.88284 1.60691L0.682843 8.80692C0.526633 8.96313 0.273367 8.96313 0.117157 8.80692C-0.0390524 8.6507 -0.0390524 8.39744 0.117157 8.24123L7.31716 1.04123C7.47337 0.88502 7.72663 0.88502 7.88284 1.04123Z"
+                    fill="white"
+                  />
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M0.117157 1.04123C0.273367 0.88502 0.526633 0.88502 0.682843 1.04123L7.88284 8.24123C8.03905 8.39744 8.03905 8.6507 7.88284 8.80692C7.72663 8.96313 7.47337 8.96313 7.31716 8.80692L0.117157 1.60691C-0.0390524 1.45071 -0.0390524 1.19744 0.117157 1.04123Z"
+                    fill="white"
+                  />
+                </svg>
+              </button>
+            )}
           </label>
           <input
             id="fileInput"
             onChange={(e) => {
-              handleFileInput(e);
+              if (!e.target.files) return;
+              setImageFile(e.target.files[0]);
             }}
             accept=".jpg, .png, .gif, .jpeg"
             type="file"
@@ -110,42 +140,43 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
             <option value="sobremesa">Sobremesa</option>
           </select>
         </div>
-        <div className="flex flex-col gap-y-4">
+        <div className="flex flex-col gap-y-4 overflow-hidden">
           <label className="text-light-400">Ingredientes</label>
-          <div className="rounded-lg px-2 py-3 bg-dark-800 text-light-500 flex gap-x-4">
-            {ingredients.map((ingredient: any, i: number) => (
-              <div
-                key={`${ingredient}-${i}`}
-                className="rounded-lg w-fit py-2 px-4 flex items-center gap-x-2 text-light-100 bg-light-600"
-              >
-                {ingredient}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveIngredientClick(i)}
+          <div className="rounded-lg px-2 py-3 bg-dark-800 text-light-500 ">
+            <div className="flex gap-x-4 overflow-auto">
+              {ingredients.map((ingredient: any, i: number) => (
+                <div
+                  key={`${ingredient}-${i}`}
+                  className="rounded-lg w-fit py-2 px-4 flex items-center gap-x-2 text-light-100 bg-light-600"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="8"
-                    height="9"
-                    viewBox="0 0 8 9"
-                    fill="none"
+                  {ingredient}
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveIngredientClick(i)}
                   >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M7.88284 1.04123C8.03905 1.19744 8.03905 1.45071 7.88284 1.60691L0.682843 8.80692C0.526633 8.96313 0.273367 8.96313 0.117157 8.80692C-0.0390524 8.6507 -0.0390524 8.39744 0.117157 8.24123L7.31716 1.04123C7.47337 0.88502 7.72663 0.88502 7.88284 1.04123Z"
-                      fill="white"
-                    />
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M0.117157 1.04123C0.273367 0.88502 0.526633 0.88502 0.682843 1.04123L7.88284 8.24123C8.03905 8.39744 8.03905 8.6507 7.88284 8.80692C7.72663 8.96313 7.47337 8.96313 7.31716 8.80692L0.117157 1.60691C-0.0390524 1.45071 -0.0390524 1.19744 0.117157 1.04123Z"
-                      fill="white"
-                    />
-                  </svg>
-                </button>
-              </div>
-            ))}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="8"
+                      height="9"
+                      viewBox="0 0 8 9"
+                      fill="none"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M7.88284 1.04123C8.03905 1.19744 8.03905 1.45071 7.88284 1.60691L0.682843 8.80692C0.526633 8.96313 0.273367 8.96313 0.117157 8.80692C-0.0390524 8.6507 -0.0390524 8.39744 0.117157 8.24123L7.31716 1.04123C7.47337 0.88502 7.72663 0.88502 7.88284 1.04123Z"
+                        fill="white"
+                      />
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M0.117157 1.04123C0.273367 0.88502 0.526633 0.88502 0.682843 1.04123L7.88284 8.24123C8.03905 8.39744 8.03905 8.6507 7.88284 8.80692C7.72663 8.96313 7.47337 8.96313 7.31716 8.80692L0.117157 1.60691C-0.0390524 1.45071 -0.0390524 1.19744 0.117157 1.04123Z"
+                        fill="white"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              ))}
             <div className="border border-light-500 border-dashed rounded-lg w-fit py-2 px-4 flex gap-x-2">
               <input
                 value={newIngredient}
@@ -176,6 +207,7 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
                   />
                 </svg>
               </button>
+            </div>
             </div>
           </div>
         </div>
