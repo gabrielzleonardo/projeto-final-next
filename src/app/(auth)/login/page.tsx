@@ -1,7 +1,7 @@
 import Image from "next/image";
 import logo from "/public/logo.svg";
 import Link from "next/link";
-import LoginForm from "@/components/authForms/LoginForm";
+import LoginForm from "@/components/forms/LoginForm";
 
 export default function SignIn() {
   return (

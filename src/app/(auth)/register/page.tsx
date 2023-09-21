@@ -1,6 +1,6 @@
 import Image from "next/image";
 import logo from "/public/logo.svg";
-import RegisterForm from "@/components/authForms/RegisterForm";
+import RegisterForm from "@/components/forms/RegisterForm";
 
 const Page = async () => {
   return (

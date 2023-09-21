@@ -38,9 +38,18 @@ const dishesImagesFolder = path.resolve(
 );
 
 export async function POST(request: NextRequest) {
-  const data = await request.formData();
-  const image: File | null = data.get("image") as unknown as File;
-  const imageName = handleDishImage(image);
+  const data =  request.body
+  console.log(data)
 
-  return NextResponse.json({ success: true });
+
+  // const image: File | null = data.get("image") as unknown as File;
+  // const price = data.get("price") as string;
+  // const name = data.get("name") as string;
+  // const description = data.get("description") as string;
+  // const category = data.get("category") as string;
+  // const ingredients = data.get("ingredients") as string;
+
+  // const imageName = handleDishImage(image);
+
+  return NextResponse.json(data);
 }

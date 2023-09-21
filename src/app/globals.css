@@ -6,6 +6,13 @@
   body {
     @apply bg-dark-400 text-light-300;
   }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
   .text-input {
     @apply px-3 py-4 bg-dark-900 rounded-lg placeholder:text-light-500;
   }
@@ -37,7 +44,8 @@
   }
 
   .dish-input-wrapper input,
-  .dish-input-wrapper select {
+  .dish-input-wrapper select,
+  .dish-input-wrapper textarea {
     @apply bg-dark-800 text-input;
   }
 }

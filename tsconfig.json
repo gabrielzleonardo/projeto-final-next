@@ -29,7 +29,11 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "/src/types/next-auth.d.ts",
-    "src/components/authForms"
-, "src/app/api/dishes/route.ts", "src/lib/cloudinary.js", "src/lib/formidable.js", "src/app/api/upload/route.ts"  ],
+    "src/components/forms",
+    "src/app/api/dishes/route.ts",
+    "src/lib/cloudinary.js",
+    "src/lib/formidable.js",
+    "src/app/api/upload/route.ts"
+  ],
   "exclude": ["node_modules"]
 }

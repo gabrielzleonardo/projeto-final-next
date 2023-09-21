@@ -1,5 +1,5 @@
 "use client";
-import { ReactEventHandler, SyntheticEvent, useState } from "react";
+import {  SyntheticEvent, useState } from "react";
 import { signIn } from "next-auth/react";
 const LoginForm = () => {
   const [email, setEmail] = useState("");
