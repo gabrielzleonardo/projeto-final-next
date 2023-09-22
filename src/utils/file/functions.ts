@@ -1,7 +1,7 @@
-export async function handleFileInput(image: File) {
-  if (!image) return;
+export async function handleFileInput(file: File) {
+  if (!file) return;
   const data = new FormData();
-  data.append("image", image);
+  data.append("file", file);
   try {
     const res = await fetch("/api/upload", {
       method: "POST",

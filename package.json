@@ -1,4 +1,9 @@
 {
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false
+  },
   "name": "projeto-final-next",
   "version": "0.1.0",
   "private": true,

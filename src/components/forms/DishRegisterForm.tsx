@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, use } from "react";
 import Image from "next/image";
-import { handleFileInput } from "@/utils/handleFileUpload";
+import { handleFileInput } from "@/utils/file/functions";
 
 const DishRegisterForm = ({ id }: { id?: number }) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -29,6 +29,8 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
     getImageName();
   }, [imageFile]);
 
+
+
   // setBlob(URL.createObjectURL(inputFile));
 
   const handleAddIngredientClick = () => {
@@ -46,22 +48,26 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
   };
 
   const handleSubmit = async () => {
-    const formDataObj = {
-      name: dishName,
-      category,
-      ingredients,
-      price,
-      description,
-    };
     try {
       const res = await fetch("/api/dishes", {
         method: "POST",
-        body: JSON.stringify(formDataObj),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: dishName,
+          category,
+          ingredients,
+          price,
+          description,
+          image: imageName,
+        }),
       })
         .then((res) => res.json())
         .catch((err) => console.error(err));
+      console.log(res);
     } catch (e: any) {
-      console.error(e);
+      console.log("vai pra porra");
     }
   };
   return (
@@ -177,37 +183,37 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
                   </button>
                 </div>
               ))}
-            <div className="border border-light-500 border-dashed rounded-lg w-fit py-2 px-4 flex gap-x-2">
-              <input
-                value={newIngredient}
-                className="bg-transparent max-w-[68px] text-light-200 outline-none"
-                type="text"
-                placeholder="Adicionar"
-                onChange={(e) => setNewIngredient(e.target.value)}
-              />
-              <button type="button" onClick={handleAddIngredientClick}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="8"
-                  height="9"
-                  viewBox="0 0 8 9"
-                  fill="none"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M0 4.92407C0 4.73998 0.149238 4.59074 0.333333 4.59074H7.66667C7.85076 4.59074 8 4.73998 8 4.92407C8 5.10817 7.85076 5.25741 7.66667 5.25741H0.333333C0.149238 5.25741 0 5.10817 0 4.92407Z"
-                    fill="#7C7C8A"
-                  />
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M4 0.924072C4.18409 0.924072 4.33333 1.07331 4.33333 1.25741V8.59074C4.33333 8.77483 4.18409 8.92407 4 8.92407C3.81591 8.92407 3.66667 8.77483 3.66667 8.59074V1.25741C3.66667 1.07331 3.81591 0.924072 4 0.924072Z"
-                    fill="#7C7C8A"
-                  />
-                </svg>
-              </button>
-            </div>
+              <div className="border border-light-500 border-dashed rounded-lg w-fit py-2 px-4 flex gap-x-2">
+                <input
+                  value={newIngredient}
+                  className="bg-transparent max-w-[68px] text-light-200 outline-none"
+                  type="text"
+                  placeholder="Adicionar"
+                  onChange={(e) => setNewIngredient(e.target.value)}
+                />
+                <button type="button" onClick={handleAddIngredientClick}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="8"
+                    height="9"
+                    viewBox="0 0 8 9"
+                    fill="none"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M0 4.92407C0 4.73998 0.149238 4.59074 0.333333 4.59074H7.66667C7.85076 4.59074 8 4.73998 8 4.92407C8 5.10817 7.85076 5.25741 7.66667 5.25741H0.333333C0.149238 5.25741 0 5.10817 0 4.92407Z"
+                      fill="#7C7C8A"
+                    />
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M4 0.924072C4.18409 0.924072 4.33333 1.07331 4.33333 1.25741V8.59074C4.33333 8.77483 4.18409 8.92407 4 8.92407C3.81591 8.92407 3.66667 8.77483 3.66667 8.59074V1.25741C3.66667 1.07331 3.81591 0.924072 4 0.924072Z"
+                      fill="#7C7C8A"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>

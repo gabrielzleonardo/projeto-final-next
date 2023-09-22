@@ -19,23 +19,33 @@ model Dish {
   id          Int          @id @default(autoincrement())
   name        String
   description String
-  price       Float
+  price       String
   image       String
   categoryId  Int
-  Category    Category     @relation(fields: [categoryId], references: [id])
-  Ingredient  Ingredient[]
-}
-
-model Category {
-  id    Int    @id @default(autoincrement())
-  name  String
-  value String
-  Dish  Dish[]
+  category    Category     @relation(fields: [categoryId], references: [id])
+  ingredients  IngredientsOnDishes[]
 }
 
 model Ingredient {
   id     Int    @id @default(autoincrement())
-  name   String
-  dishId Int
-  Dish   Dish   @relation(fields: [dishId], references: [id])
+  name   String @unique
+  Dishes   IngredientsOnDishes[]
 }
+
+model IngredientsOnDishes {
+  ingredientId  Int
+  dishId        Int
+  ingredient    Ingredient   @relation(fields: [ingredientId], references: [id])
+  dish          Dish         @relation(fields: [dishId], references: [id])
+
+  @@id([ingredientId, dishId])
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String 
+  value String @unique
+  dishes  Dish[]
+}
+
+

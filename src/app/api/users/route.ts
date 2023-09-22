@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import validator from "validator";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
+import  prisma  from "@/lib/prisma";
 import { appError } from "@/utils/AppError";
 
 export async function GET() {
