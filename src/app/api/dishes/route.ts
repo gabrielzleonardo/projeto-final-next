@@ -40,31 +40,50 @@ export async function POST(request: NextRequest) {
     })
     .then((category) => category!.id);
 
-    ingredients.forEach(async (ingredient: string) => {
-      const ingredientId = await prisma.ingredient
-        .findUnique({
-          where: {
+  const dish = await prisma.dish
+    .create({
+      data: {
+        name,
+        categoryId,
+        image,
+        price,
+        description,
+      },
+    })
+    .then((dish) => dish);
+
+  ingredients.forEach(async (ingredient: string) => {
+    const ingredientExists = await prisma.ingredient
+      .findUnique({
+        where: {
+          name: ingredient,
+        },
+      })
+      .then((ingredient) => ingredient?.id);
+
+    if (!ingredientExists) {
+      const newIngredient = await prisma.ingredient
+        .create({
+          data: {
             name: ingredient,
           },
         })
-        .then((ingredient) => ingredient!.id);
+        .then((ingredient) => ingredient.id);
+
       await prisma.ingredientsOnDishes.create({
         data: {
-          ingredientId,
-          dishId: 1,
+          ingredientId: newIngredient,
+          dishId: dish.id,
+        },
+      });
+    } else {
+      await prisma.ingredientsOnDishes.create({
+        data: {
+          ingredientId: ingredientExists,
+          dishId: dish.id,
         },
       });
     }
-  );
-
-  const dish = await prisma.dish.create({
-    data: {
-      name,
-      categoryId,
-      image,
-      price,
-      description,
-    },
   });
 
   moveFile(image);
