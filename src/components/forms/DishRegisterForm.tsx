@@ -29,8 +29,6 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
     getImageName();
   }, [imageFile]);
 
-
-
   // setBlob(URL.createObjectURL(inputFile));
 
   const handleAddIngredientClick = () => {
@@ -40,11 +38,9 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
   };
 
   const handleRemoveIngredientClick = (ingredientToBeDeletedIndex: any) => {
-    const newIngredientList = ingredients.toSpliced(
-      ingredientToBeDeletedIndex,
-      1
+    setIngredients(
+      ingredients.filter((ingredient, i) => i !== ingredientToBeDeletedIndex)
     );
-    setIngredients(newIngredientList);
   };
 
   const handleSubmit = async () => {
