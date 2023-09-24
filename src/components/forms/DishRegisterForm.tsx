@@ -3,18 +3,28 @@ import { useState, useEffect, use } from "react";
 import Image from "next/image";
 import { handleFileInput } from "@/utils/file/functions";
 
-const DishRegisterForm = ({ id }: { id?: number }) => {
+const DishRegisterForm = ({ data }: { data?: any }) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageName, setImageName] = useState<string>("");
   const [category, setCategory] = useState<any>("refeicao");
   const [dishName, setDishName] = useState<string>("");
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [newIngredient, setNewIngredient] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [dishData, setDishData] = useState<null>(null);
   const [price, setPrice] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [teste, setTeste] = useState<any>(null);
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [dishData, setDishData] = useState<null>(null);
+
+  const fieldsAreFilled =
+    !dishName ||
+    !category ||
+    !ingredients ||
+    !price ||
+    !description ||
+    !imageFile
+      ? false
+      : true;
 
   // const [blob, setBlob] = useState<any>("");
   // console.log(dishName);
@@ -63,18 +73,31 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
         .catch((err) => console.error(err));
       console.log(res);
     } catch (e: any) {
-      console.log("vai pra porra");
+      console.error(e);
     }
   };
+const [form, setForm] = useState<any>();
+
+const handleInputChange = (e: any) => {
+  const { name, value } = e.target;
+  setForm({ ...form, [name]: value });
+};
+
+useEffect(() => {
+  if (data) {
+    setForm(data);
+  }
+}, [data]);
+
   return (
-    <div className="">
+    <div>
       <h1 className="my-7 text-3xl">{!id ? "Novo" : "Editar"} prato</h1>
-      <form id="form" className="grid gap-y-6">
-        <div className="flex flex-col gap-y-4">
+      <form id="form" className="grid gap-y-6 lg:grid-cols-9 lg:gap-8">
+        <div className="flex flex-col gap-y-4 lg:col-span-2">
           <span className="text-light-400">Imagem do prato</span>
           <label
             htmlFor="fileInput"
-            className="px-8 py-3 bg-dark-800 flex items-center justify-between cursor-pointer gap-2 rounded-lg text-light-100 text-sm"
+            className="px-8 py-4 bg-dark-800 flex items-center justify-between cursor-pointer gap-2 rounded-lg text-light-100 text-sm"
           >
             <div className="flex items-center gap-2">
               <Image
@@ -112,6 +135,7 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
           </label>
           <input
             id="fileInput"
+            value={form?.image}
             onChange={(e) => {
               if (!e.target.files) return;
               setImageFile(e.target.files[0]);
@@ -121,7 +145,7 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
             className="sr-only"
           />
         </div>
-        <div className="dish-input-wrapper">
+        <div className="dish-input-wrapper lg:col-span-4">
           <label>Nome</label>
           <input
             type="text"
@@ -129,7 +153,7 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
             onChange={(e) => setDishName(e.target.value)}
           />
         </div>
-        <div className="dish-input-wrapper">
+        <div className="dish-input-wrapper lg:col-span-3">
           <label>Categoria</label>
           <select
             name="select"
@@ -142,14 +166,14 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
             <option value="sobremesa">Sobremesa</option>
           </select>
         </div>
-        <div className="flex flex-col gap-y-4 overflow-hidden">
+        <div className="flex flex-col gap-y-4 overflow-hidden lg:col-span-7">
           <label className="text-light-400">Ingredientes</label>
           <div className="rounded-lg px-2 py-3 bg-dark-800 text-light-500 ">
             <div className="flex gap-x-4 overflow-auto">
               {ingredients.map((ingredient: any, i: number) => (
                 <div
                   key={`${ingredient}-${i}`}
-                  className="rounded-lg w-fit py-2 px-4 flex items-center gap-x-2 text-light-100 bg-light-600"
+                  className="rounded-lg w-fit py-2 px-4 flex items-center gap-x-2 text-light-100 bg-light-600 max-h-8"
                 >
                   {ingredient}
                   <button
@@ -179,7 +203,7 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
                   </button>
                 </div>
               ))}
-              <div className="border border-light-500 border-dashed rounded-lg w-fit py-2 px-4 flex gap-x-2">
+              <div className="border border-light-500 border-dashed rounded-lg w-fit py-2 px-4 flex gap-x-2 max-h-8">
                 <input
                   value={newIngredient}
                   className="bg-transparent max-w-[68px] text-light-200 outline-none"
@@ -213,7 +237,7 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
             </div>
           </div>
         </div>
-        <div className="dish-input-wrapper">
+        <div className="dish-input-wrapper lg:col-span-2">
           <label>Preço</label>
           <input
             value={price}
@@ -222,20 +246,24 @@ const DishRegisterForm = ({ id }: { id?: number }) => {
             onChange={(e) => setPrice(e.target.value)}
           />
         </div>
-        <div className="dish-input-wrapper">
+        <div className="dish-input-wrapper lg:col-span-full">
           <label>Descrição</label>
           <textarea
             value={description}
             placeholder="Fale brevemente sobre o prato, seus ingredientes e composição"
-            className="resize-none min-h-[172px] p-4"
+            className="resize-none min-h-[172px] p-4 "
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
-
-        <button type="button" onClick={handleSubmit}>
-          enviar
-        </button>
       </form>
+      <button
+        disabled={id ? false : !fieldsAreFilled}
+        className="btn btn-primary lg:w-fit px-6 py-4 lg:ml-auto lg:block lg:mt-8 mt-6"
+        type="button"
+        onClick={handleSubmit}
+      >
+        Salvar alterações
+      </button>
     </div>
   );
 };
