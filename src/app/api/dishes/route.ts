@@ -6,16 +6,6 @@ import { appError } from "@/utils/AppError";
 import prisma from "@/lib/prisma";
 import { uploadFolder, tempFolder } from "@/utils/folders/paths";
 
-// export async function GET(request: NextRequest) {
-//   const dish = await prisma.dish.findUnique({
-//     where: {
-//       id: 1,
-//     },
-//   });
-
-//   return NextResponse.json(dish);
-// }
-
 const moveFile = async (file: string) => {
   if (!fs.existsSync(uploadFolder)) {
     fs.mkdirSync(uploadFolder);
@@ -28,9 +18,20 @@ const moveFile = async (file: string) => {
   });
 };
 
+// export async function GET(request: NextRequest) {
+//   const dish = await prisma.dish.findUnique({
+//     where: {
+//       id: 1,
+//     },
+//   });
+
+//   return NextResponse.json(dish);
+// }
+
 export async function POST(request: NextRequest) {
-  const { name, category, ingredients, price, description, image } =
-    await request.json();
+  const data = await request.json();
+  const { name, category, ingredients, price, description, image, id } = data;
+
   if (!category) return appError("Categoria não informada");
   const categoryId = await prisma.category
     .findUnique({
@@ -40,55 +41,47 @@ export async function POST(request: NextRequest) {
     })
     .then((category) => category!.id);
 
-  const dish = await prisma.dish
-    .create({
-      data: {
-        name,
-        categoryId,
-        image,
-        price,
-        description,
-      },
-    })
-    .then((dish) => dish);
+  const dish = await prisma.dish.create({
+    data: {
+      name,
+      categoryId,
+      image,
+      price,
+      description,
+    },
+  });
 
   ingredients.forEach(async (ingredient: string) => {
-    const ingredientExists = await prisma.ingredient
-      .findUnique({
+    try {
+      const ing = await prisma.ingredient.upsert({
         where: {
           name: ingredient,
         },
-      })
-      .then((ingredient) => ingredient?.id);
+        update: {},
+        create: {
+          name: ingredient,
+        },
+      });
 
-    if (!ingredientExists) {
-      const newIngredient = await prisma.ingredient
-        .create({
-          data: {
-            name: ingredient,
+      await prisma.ingredientsOnDishes.upsert({
+        where: {
+          ingredientId_dishId: {
+            ingredientId: ing.id,
+            dishId: dish.id,
           },
-        })
-        .then((ingredient) => ingredient.id);
-
-      await prisma.ingredientsOnDishes.create({
-        data: {
-          ingredientId: newIngredient,
+        },
+        update: {},
+        create: {
+          ingredientId: ing.id,
           dishId: dish.id,
         },
       });
-    } else {
-      await prisma.ingredientsOnDishes.create({
-        data: {
-          ingredientId: ingredientExists,
-          dishId: dish.id,
-        },
-      });
+    } catch (error: any) {
+      return appError(error);
     }
   });
 
   moveFile(image);
-
-  // create a funciton to move the file to the public folder
 
   return NextResponse.json(dish);
 }

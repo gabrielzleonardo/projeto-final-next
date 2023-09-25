@@ -48,4 +48,6 @@
   .dish-input-wrapper textarea {
     @apply bg-dark-800 text-input;
   }
+
+
 }

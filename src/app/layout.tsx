@@ -1,7 +1,8 @@
-import "./globals.css";
 import { Roboto, Poppins } from "next/font/google";
 import { NextAuthProvider } from "./providers";
-import Header from "@/components/layout/Header";
+import { MantineProvider } from "@mantine/core";
+
+import "./globals.css";
 
 const poppins = Poppins({
   weight: ["400", "500", "700"],
@@ -29,8 +30,7 @@ export default async function RootLayout({
     <html lang="pt-br">
       <body className={`${roboto.variable} ${poppins.variable} font-roboto`}>
         <NextAuthProvider>
-          
-          {children}
+          <MantineProvider>{children}</MantineProvider>
         </NextAuthProvider>
       </body>
     </html>

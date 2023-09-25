@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -36,7 +36,7 @@ model IngredientsOnDishes {
   ingredientId  Int
   dishId        Int
   ingredient    Ingredient   @relation(fields: [ingredientId], references: [id])
-  dish          Dish         @relation(fields: [dishId], references: [id])
+  dish          Dish         @relation(fields: [dishId], references: [id], onDelete: Cascade)
 
   @@id([ingredientId, dishId])
 }
